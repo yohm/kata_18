@@ -36,26 +36,26 @@ describe Dependencies do
     end
   end
 
-  # describe "#dependencies_for" do
+  describe "#dependencies_for" do
 
-  #   before(:each) do
-  #     @dep = Dependencies.new
-  #     @dep.add_direct('A', %w{ B C } )
-  #     @dep.add_direct('B', %w{ C E } )
-  #     @dep.add_direct('C', %w{ G   } )
-  #     @dep.add_direct('D', %w{ A F } )
-  #     @dep.add_direct('E', %w{ F   } )
-  #     @dep.add_direct('F', %w{ H   } )
-  #   end
+    before(:each) do
+      @dep = Dependencies.new
+      @dep.add_direct('A', %w{ B C } )
+      @dep.add_direct('B', %w{ C E } )
+      @dep.add_direct('C', %w{ G   } )
+      @dep.add_direct('D', %w{ A F } )
+      @dep.add_direct('E', %w{ F   } )
+      @dep.add_direct('F', %w{ H   } )
+    end
 
-  #   it "returns depending files" do
-  #     @dep.dependencies_for('A').should eq %w{ B C E F G H }
-  #     @dep.dependencies_for('B').should eq %w{ C E F G H }
-  #     @dep.dependencies_for('C').should eq %w{ G }
-  #     @dep.dependencies_for('D').should eq %w{ A B C E F G H }
-  #     @dep.dependencies_for('E').should eq %w{ F H }
-  #     @dep.dependencies_for('F').should eq %w{ H }
-  #   end
-  # end
+    it "returns depending files" do
+      @dep.dependencies_for('A').should eq %w{ B C E F G H }
+      @dep.dependencies_for('B').should eq %w{ C E F G H }
+      @dep.dependencies_for('C').should eq %w{ G }
+      @dep.dependencies_for('D').should eq %w{ A B C E F G H }
+      @dep.dependencies_for('E').should eq %w{ F H }
+      @dep.dependencies_for('F').should eq %w{ H }
+    end
+  end
   
 end
