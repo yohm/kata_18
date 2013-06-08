@@ -1,4 +1,5 @@
 require 'pp'
+require 'json'
 
 class Dependencies
 
@@ -23,5 +24,15 @@ class Dependencies
       dependencies += dependencies_for(v, investigated)
     end
     dependencies.uniq.sort
+  end
+
+  # return json data for d3.js rendering (hierarchical edge bundling)
+  # See http://bl.ocks.org/mbostock/5672200
+  def to_heb_json
+    arr = []
+    @direct_dep.keys.each do |key|
+      arr << {name: key, size: 1, imports: dependencies_for(key)}
+    end
+    arr.to_json
   end
 end

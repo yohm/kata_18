@@ -87,4 +87,23 @@ describe Dependencies do
       end
     end
   end
+
+  describe "#to_heb_json" do
+
+    before(:each) do
+      @dep = Dependencies.new
+      @dep.add_direct('A', %w{ B } )
+      @dep.add_direct('B', %w{ C } )
+      @dep.add_direct('C', %w{ A } )
+    end
+
+    it "returns a json for rendering hierarchical edge bundling" do
+      a = JSON.parse( @dep.to_heb_json )
+      a.should be_a(Array)
+      a.should have(3).items
+      recA = a.find {|rec| rec["name"] == 'A'}
+      recA.should be_a(Hash)
+      recA['imports'].should eq ["B", "C"]
+    end
+  end
 end
