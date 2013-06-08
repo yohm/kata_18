@@ -9,15 +9,15 @@ describe Dependencies do
       @dep.add_direct('A', %w{B C})
     end
 
-    it "returns directly depending file" do
+    it "returns directly depending files" do
       @dep.direct_dependencies_for('A').should eq %w{B C}
     end
 
-    it "returns an empty array if key is independent of the others" do
+    it "returns an empty array if the file is independent of the others" do
       @dep.direct_dependencies_for('C').should eq []
     end
 
-    it "returns nil if key is not found" do
+    it "returns nil if the file is not found" do
       @dep.direct_dependencies_for('D').should be_nil
     end
   end
@@ -28,7 +28,7 @@ describe Dependencies do
       @dep = Dependencies.new
     end
 
-    it "adds direct dependency" do
+    it "adds direct dependencies" do
       @dep.add_direct('A', ['B'])
       expect {
         @dep.add_direct('A', %w{C D})
@@ -48,7 +48,7 @@ describe Dependencies do
       @dep.add_direct('F', %w{ H   } )
     end
 
-    it "returns depending files" do
+    it "returns dependencies" do
       @dep.dependencies_for('A').should eq %w{ B C E F G H }
       @dep.dependencies_for('B').should eq %w{ C E F G H }
       @dep.dependencies_for('C').should eq %w{ G }
@@ -56,6 +56,7 @@ describe Dependencies do
       @dep.dependencies_for('E').should eq %w{ F H }
       @dep.dependencies_for('F').should eq %w{ H }
     end
+
   end
   
 end
