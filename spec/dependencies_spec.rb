@@ -57,6 +57,9 @@ describe Dependencies do
       @dep.dependencies_for('F').should eq %w{ H }
     end
 
+    it "returns an empty array if the file is independent of the others" do
+      @dep.dependencies_for('H').should eq []
+    end
   end
   
 end
