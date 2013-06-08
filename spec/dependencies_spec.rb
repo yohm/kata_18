@@ -38,28 +38,53 @@ describe Dependencies do
 
   describe "#dependencies_for" do
 
-    before(:each) do
-      @dep = Dependencies.new
-      @dep.add_direct('A', %w{ B C } )
-      @dep.add_direct('B', %w{ C E } )
-      @dep.add_direct('C', %w{ G   } )
-      @dep.add_direct('D', %w{ A F } )
-      @dep.add_direct('E', %w{ F   } )
-      @dep.add_direct('F', %w{ H   } )
+    context "for non-circular dependencies" do
+
+      before(:each) do
+        @dep = Dependencies.new
+        @dep.add_direct('A', %w{ B C } )
+        @dep.add_direct('B', %w{ C E } )
+        @dep.add_direct('C', %w{ G   } )
+        @dep.add_direct('D', %w{ A F } )
+        @dep.add_direct('E', %w{ F   } )
+        @dep.add_direct('F', %w{ H   } )
+      end
+
+      it "returns dependencies" do
+        @dep.dependencies_for('A').should eq %w{ B C E F G H }
+        @dep.dependencies_for('B').should eq %w{ C E F G H }
+        @dep.dependencies_for('C').should eq %w{ G }
+        @dep.dependencies_for('D').should eq %w{ A B C E F G H }
+        @dep.dependencies_for('E').should eq %w{ F H }
+        @dep.dependencies_for('F').should eq %w{ H }
+      end
+
+      it "returns an empty array if the file is independent of the others" do
+        @dep.dependencies_for('H').should eq []
+      end
     end
 
-    it "returns dependencies" do
-      @dep.dependencies_for('A').should eq %w{ B C E F G H }
-      @dep.dependencies_for('B').should eq %w{ C E F G H }
-      @dep.dependencies_for('C').should eq %w{ G }
-      @dep.dependencies_for('D').should eq %w{ A B C E F G H }
-      @dep.dependencies_for('E').should eq %w{ F H }
-      @dep.dependencies_for('F').should eq %w{ H }
-    end
+    context "for circular dependencies" do
 
-    it "returns an empty array if the file is independent of the others" do
-      @dep.dependencies_for('H').should eq []
+      before(:each) do
+        @dep = Dependencies.new
+      end
+
+      it "returns dependencies" do
+        @dep.add_direct('A', %w{ B } )
+        @dep.add_direct('B', %w{ C } )
+        @dep.add_direct('C', %w{ A } )
+        @dep.dependencies_for('A').should eq %w{ B C }
+        @dep.dependencies_for('B').should eq %w{ A C }
+        @dep.dependencies_for('C').should eq %w{ A B }
+      end
+
+      it "returns dependencies" do
+        @dep.add_direct('A', %w{ B } )
+        @dep.add_direct('B', %w{ C } )
+        @dep.add_direct('C', %w{ A D } )
+        @dep.dependencies_for('A').should eq %w{ B C D }
+      end
     end
   end
-  
 end

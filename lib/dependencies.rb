@@ -16,12 +16,12 @@ class Dependencies
     @direct_dep[key] ? @direct_dep[key].dup : nil
   end
 
-  def dependencies_for(key)
-    dependencies = @direct_dep[key]
-    @direct_dep[key].each do |d|
-      dependencies += dependencies_for(d)
+  def dependencies_for(key, investigated = [])
+    investigated << key
+    dependencies = @direct_dep[key] - investigated
+    (@direct_dep[key] - investigated).each do |v|
+      dependencies += dependencies_for(v, investigated)
     end
-    pp key, dependencies, @direct_dep
     dependencies.uniq.sort
   end
 end
