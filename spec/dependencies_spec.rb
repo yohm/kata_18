@@ -115,8 +115,8 @@ describe Dependencies do
 
     it "parses a string space-separated format" do
       str = <<EOS
-A   B   C
-B   C   D
+A B C
+B C D
 EOS
       @dep.parse(str)
       @dep.direct_dependencies_for('A').should eq %w{ B C }
