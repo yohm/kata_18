@@ -106,4 +106,21 @@ describe Dependencies do
       recA['imports'].should eq ["B", "C"]
     end
   end
+
+  describe "#parse" do
+
+    before(:each) do
+      @dep = Dependencies.new
+    end
+
+    it "parses a string space-separated format" do
+      str = <<EOS
+A   B   C
+B   C   D
+EOS
+      @dep.parse(str)
+      @dep.direct_dependencies_for('A').should eq %w{ B C }
+      @dep.direct_dependencies_for('B').should eq %w{ C D }
+    end
+  end
 end

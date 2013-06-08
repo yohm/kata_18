@@ -7,6 +7,14 @@ class Dependencies
     @direct_dep = Hash.new
   end
 
+  def parse(str)
+    str.each_line do |line|
+      key = line.split.first
+      dep = line.split[1..-1]
+      add_direct(key, dep)
+    end
+  end
+
   def add_direct(key, dependencies)
     @direct_dep[key] = [] unless @direct_dep.has_key?(key)
     @direct_dep[key] += dependencies
